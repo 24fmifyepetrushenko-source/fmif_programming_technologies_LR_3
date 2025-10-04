@@ -50,7 +50,7 @@ export default function App() {
 
     try {
       setIsSubmitting(true);
-      const response = await axios.post(API_BASE_URL, { task: task.trim() });
+      const response = await axios.post(API_BASE_URL, { title: task.trim() });
       const newTask = response.data;
       setTasks((prev) => [...prev, newTask]);
       setSubmitError("");
