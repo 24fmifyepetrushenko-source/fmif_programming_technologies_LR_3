@@ -4,7 +4,6 @@ import dotenv from "dotenv";
 
 import pool from "./config/database.js";
 import taskRoutes from "./routes/tasks.js";
-import requestLogger from "./middleware/logger.js";
 
 dotenv.config();
 
@@ -13,7 +12,6 @@ const PORT = process.env.API_PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
-app.use(requestLogger);
 
 app.use("/api/tasks", taskRoutes);
 
