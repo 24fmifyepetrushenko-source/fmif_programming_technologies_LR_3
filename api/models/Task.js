@@ -2,14 +2,11 @@ import pool from "../config/database.js";
 
 const Task = {
   async getAll() {
-    // mock data
-    return [
-      { id: 1, title: "First task" },
-      { id: 2, title: "Second task" },
-    ]; // Повертаємо MOCK дані
-    // const result = await pool.query("SELECT * FROM tasks ORDER BY id ASC");
-    // return [];
-    // return result.rows;
+    const result = await pool.query(
+      "SELECT id, title, created_at FROM tasks ORDER BY created_at DESC",
+    );
+
+    return result.rows;
   },
 
   async create({ title }) {
@@ -21,10 +18,12 @@ const Task = {
       throw error;
     }
 
-    console.log('*** RESULT ***: ', trimmedTitle);
-    
+    const result = await pool.query(
+      "INSERT INTO tasks (title) VALUES ($1) RETURNING id, title, created_at",
+      [trimmedTitle],
+    );
 
-    return trimmedTitle;
+    return result.rows[0];
   },
 };
 
