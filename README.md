@@ -14,30 +14,19 @@ Repository for programming technologies dyscipline. Lab work #3 (DOCKER-COMPOSE)
 ## Running only the PostgreSQL database
 
 1. Ensure the `.env` file contains the desired database credentials.
-2. Build the custom PostgreSQL image:
+2. Start (and build on the first run) only the PostgreSQL service:
    ```bash
-   docker build -t local/task-db:latest ./db
+   docker compose --profile db up --build db
    ```
-3. Start the database container for debugging:
+   On subsequent runs you can omit `--build` if `db/Dockerfile` and `db/init.sql` did not change.
+3. Connect your application to `localhost:${DB_PORT}` using the same credentials from `.env`.
+4. Stop the database once you are done debugging:
    ```bash
-   docker run --name task-db \
-     --env-file ./.env \
-     -p ${DB_PORT:-5432}:5432 \
-     -v task-db-data:/var/lib/postgresql/data \
-     -v $(pwd)/db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro \
-     local/task-db:latest
+   docker compose --profile db down
    ```
-4. Point your application to `localhost:${DB_PORT}` using the same credentials from `.env`.
-5. When finished, stop and remove the container:
-   ```bash
-   docker stop task-db && docker rm task-db
-   ```
-   To remove the persistent volume, also run:
-   ```bash
-   docker volume rm task-db-data
-   ```
+   Add `-v` to the `down` command when you want to drop the persistent `db_storage` volume.
 
 ### Notes
-- Update `db/init.sql` when you need to change the seed data. Rebuild the image (step 2) afterward.
-- The shared `task-db-data` volume keeps your data between restarts. Remove it to reset the database.
+- Update `db/init.sql` when you need to change the seed data. Rebuild by rerunning the `docker compose --profile db up --build db` command.
+- The shared `db_storage` volume keeps your data between restarts. Drop it with `docker compose --profile db down -v` to reset the database.
 - For alternative ports, change `DB_PORT` in `.env` before starting containers.
