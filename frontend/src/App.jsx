@@ -6,7 +6,8 @@ import Snackbar from "@mui/material/Snackbar";
 import TaskList from "./components/TaskList.jsx";
 import TaskInput from "./components/TaskInput.jsx";
 
-const API_BASE_URL = "http://localhost:5000/api/tasks";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_TASKS_URL = `${API_BASE_URL}/api/tasks`;
 
 export default function App() {
   const [tasks, setTasks] = useState([]);
@@ -20,7 +21,7 @@ export default function App() {
   const fetchTasks = useCallback(async ({ signal } = {}) => {
     try {
       setLoading(true);
-      const response = await axios.get(API_BASE_URL, { signal });
+      const response = await axios.get(API_TASKS_URL, { signal });
       const data = Array.isArray(response.data) ? response.data : [];
       setTasks(data);
       setFetchError("");
@@ -50,7 +51,7 @@ export default function App() {
 
     try {
       setIsSubmitting(true);
-      const response = await axios.post(API_BASE_URL, { title: task.trim() });
+      const response = await axios.post(API_TASKS_URL, { title: task.trim() });
       const newTask = response.data;
       setTasks((prev) => [...prev, newTask]);
       setSubmitError("");
