@@ -35,7 +35,11 @@ services:
       - /app/node_modules
 
   db:
-    image: postgres:15-alpine
+    build:
+      context: ./db
+    image: local/task-db:latest
+    profiles:
+      - db
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
