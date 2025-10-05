@@ -5,6 +5,7 @@ dotenv.config();
 
 const { Pool } = pkg;
 
+// This pool keeps a small group of ready database connections.
 const pool = new Pool({
   host: process.env.DB_HOST || "localhost",
   port: Number(process.env.DB_PORT) || 5432,

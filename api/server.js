@@ -17,6 +17,7 @@ app.use(requestLogger);
 
 app.use("/api/tasks", taskRoutes);
 
+// This route checks that the API and database are alive.
 app.get("/health", async (req, res, next) => {
   try {
     await pool.query("SELECT 1");
@@ -30,6 +31,7 @@ app.use((req, res) => {
   res.status(404).json({ message: "Resource not found" });
 });
 
+// This error handler sends a clear message back to the client.
 app.use((err, req, res, next) => {
   console.error(err); // keep console output simple for debugging
   const status = err.status || 500;

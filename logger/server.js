@@ -11,6 +11,7 @@ const PORT = process.env.LOGGER_PORT || 4000;
 const LOGS_DIR = path.join(__dirname, "logs");
 const LOG_FILE_PATH = path.join(LOGS_DIR, "app.log");
 
+// This makes sure the log folder is ready before writing files.
 if (!fs.existsSync(LOGS_DIR)) {
   fs.mkdirSync(LOGS_DIR, { recursive: true });
 }
@@ -19,6 +20,7 @@ app.use(express.json({ limit: "1mb" }));
 
 let writeQueue = Promise.resolve();
 
+// This helper writes each log line to the file one after another.
 const appendLog = (entry) => {
   writeQueue = writeQueue
     .catch(() => {})
@@ -27,6 +29,7 @@ const appendLog = (entry) => {
   return writeQueue;
 };
 
+// This route accepts log messages from other services.
 app.post("/log", async (req, res) => {
   const { service, level, message } = req.body || {};
 
