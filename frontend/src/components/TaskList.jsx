@@ -9,6 +9,7 @@ import Typography from "@mui/material/Typography";
 import Alert from "@mui/material/Alert";
 
 export default function TaskList({ tasks, loading, error, hasTasks, onRetry }) {
+  // This component shows different states of the task list area.
   return (
     <Box
       component="section"
@@ -29,6 +30,7 @@ export default function TaskList({ tasks, loading, error, hasTasks, onRetry }) {
         Список завдань
       </Typography>
       {loading && <CircularProgress size={48} sx={{ marginTop: 4 }} />}
+      {/* This part tells the user when loading the list failed. */}
       {!loading && error && (
         <Alert
           severity="error"
@@ -42,15 +44,18 @@ export default function TaskList({ tasks, loading, error, hasTasks, onRetry }) {
           {error}
         </Alert>
       )}
+      {/* This part invites the user to add the first task. */}
       {!loading && !error && !hasTasks && (
         <Typography variant="body1" color="text.secondary">
           Завдань поки немає. Додайте перше!
         </Typography>
       )}
+      {/* This part draws each task in a tidy list. */}
       {!loading && !error && hasTasks && (
         <List
           sx={{ width: "100%", maxWidth: 480, bgcolor: "background.paper" }}
         >
+          {/* This loop turns every task into one list row. */}
           {tasks.map((task, index) => {
             const content = task?.title ?? task?.name ?? task?.task ?? task;
             return (

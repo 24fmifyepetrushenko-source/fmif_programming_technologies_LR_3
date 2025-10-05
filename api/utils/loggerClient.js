@@ -4,6 +4,7 @@ const LOGGER_URL =
 const SERVICE_NAME = process.env.SERVICE_NAME || "api";
 const REQUEST_TIMEOUT = Number(process.env.LOGGER_TIMEOUT || 2000);
 
+// This helper sends a request to the logger service with a safety timeout.
 const safeFetch = async (payload) => {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT);
@@ -33,6 +34,7 @@ const safeFetch = async (payload) => {
   }
 };
 
+// This client prepares the log data before sending it away.
 const loggerClient = {
   async log({ message, level = "info", service = SERVICE_NAME }) {
     if (!message) {

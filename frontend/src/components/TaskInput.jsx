@@ -8,6 +8,7 @@ import Typography from "@mui/material/Typography";
 export default function TaskInput({ onAddTask, disabled }) {
   const [value, setValue] = useState("");
 
+  // This function stops the form from reloading the page and adds a task.
   const handleSubmit = async (event) => {
     event.preventDefault();
     const trimmedValue = value.trim();
@@ -20,6 +21,7 @@ export default function TaskInput({ onAddTask, disabled }) {
     }
   };
 
+  // This layout shows the form where the user types a new task.
   return (
     <Box
       component="section"

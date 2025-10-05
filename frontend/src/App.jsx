@@ -18,6 +18,7 @@ export default function App() {
 
   const hasTasks = useMemo(() => tasks.length > 0, [tasks]);
 
+  // This helper grabs the list of tasks from the server.
   const fetchTasks = useCallback(async ({ signal } = {}) => {
     try {
       setLoading(true);
@@ -37,12 +38,14 @@ export default function App() {
     }
   }, []);
 
+  // This effect loads tasks as soon as the page opens.
   useEffect(() => {
     const controller = new AbortController();
     fetchTasks({ signal: controller.signal });
     return () => controller.abort();
   }, [fetchTasks]);
 
+  // This function sends a new task to the server and updates the list.
   const handleAddTask = async (task) => {
     if (!task?.trim()) {
       setSubmitError("Текст завдання не може бути порожнім.");
@@ -68,6 +71,7 @@ export default function App() {
 
   const handleCloseSubmitError = () => setSubmitError("");
 
+  // This layout shows the task list, the input, and any error messages.
   return (
     <Box
       sx={{

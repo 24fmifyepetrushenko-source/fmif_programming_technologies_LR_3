@@ -2,6 +2,7 @@ import loggerClient from "../utils/loggerClient.js";
 
 const METHODS_TO_LOG = new Set(["GET", "POST"]);
 
+// This middleware writes down basic info about each GET or POST request.
 const requestLogger = (req, res, next) => {
   if (!METHODS_TO_LOG.has(req.method)) {
     return next();
@@ -9,6 +10,7 @@ const requestLogger = (req, res, next) => {
 
   const start = Date.now();
 
+  // This part waits until the response is done and then logs the result.
   res.on("finish", () => {
     const duration = Date.now() - start;
     const status = res.statusCode;
@@ -16,6 +18,7 @@ const requestLogger = (req, res, next) => {
 
     let message = `${req.method} ${req.originalUrl} - ${status} (${duration}ms)`;
 
+    // This block adds the task title to the log when we create a task.
     if (req.method === "POST") {
       const title =
           typeof req.body?.title === "string" ? req.body.title.trim() : "";

@@ -1,6 +1,7 @@
 import pool from "../config/database.js";
 
 const Task = {
+  // This function pulls every task from the database in newest-first order.
   async getAll() {
     const result = await pool.query(
       "SELECT id, title, created_at FROM tasks ORDER BY created_at DESC",
@@ -9,6 +10,7 @@ const Task = {
     return result.rows;
   },
 
+  // This function saves a task and gives back the stored row.
   async create({ title }) {
     const trimmedTitle = title?.trim();
 
