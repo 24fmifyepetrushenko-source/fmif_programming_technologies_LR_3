@@ -13,7 +13,17 @@ const requestLogger = (req, res, next) => {
     const duration = Date.now() - start;
     const status = res.statusCode;
     const level = status >= 500 ? "error" : "info";
-    const message = `${req.method} ${req.originalUrl} - ${status} (${duration}ms)`;
+
+    let message = `${req.method} ${req.originalUrl} - ${status} (${duration}ms)`;
+
+    if (req.method === "POST") {
+      const title =
+          typeof req.body?.title === "string" ? req.body.title.trim() : "";
+
+      if (title) {
+        message += ` - title: "${title}"`;
+      }
+    }
 
     loggerClient.log({ level, message }).catch((error) => {
       console.error("Unexpected error while logging request", error);
